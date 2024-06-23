@@ -24,8 +24,8 @@ func interpret(rt reflect.Type) *Type {
 			rt = rt.Elem()
 		}
 		return &Type{
-			Kind:  KindPointer,
-			Inner: interpret(rt),
+			Kind:  KindComposite,
+			Types: []*Type{TypeNull, interpret(rt)},
 		}
 	}
 	switch kind := rt.Kind(); kind {

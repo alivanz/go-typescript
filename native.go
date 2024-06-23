@@ -17,6 +17,10 @@ var (
 		Name: "null",
 		Kind: KindNative,
 	}
+	TypeUndefined = &Type{
+		Name: "undefined",
+		Kind: KindNative,
+	}
 	TypeDate = &Type{
 		Name: "Date",
 		Kind: KindNative,

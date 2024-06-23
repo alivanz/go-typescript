@@ -45,9 +45,9 @@ func TestInterpretStruct(t *testing.T) {
 		Element: []Element{
 			{Name: "Name", Type: TypeString},
 			{Name: "alias", Type: TypeNumber},
-			{Name: "Ptr1", Type: &Type{Kind: KindPointer, Inner: TypeString}},
-			{Name: "Ptr2", Type: &Type{Kind: KindPointer, Inner: TypeString}},
-			{Name: "Ptr3", Type: &Type{Kind: KindPointer, Inner: TypeString}},
+			{Name: "Ptr1", Type: &Type{Kind: KindComposite, Types: []*Type{TypeNull, TypeString}}},
+			{Name: "Ptr2", Type: &Type{Kind: KindComposite, Types: []*Type{TypeNull, TypeString}}},
+			{Name: "Ptr3", Type: &Type{Kind: KindComposite, Types: []*Type{TypeNull, TypeString}}},
 			{Name: "Array", Type: &Type{Kind: KindArray, Inner: TypeString}},
 			{Name: "Slice", Type: &Type{Kind: KindArray, Inner: TypeString}},
 		},

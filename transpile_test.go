@@ -36,7 +36,7 @@ func TestTranspile(t *testing.T) {
 	ID: string
 	Name: string
 	Member: Account[]
-	MemberPtr: (undefined | Account)[]
+	MemberPtr: (null | Account)[]
 }
 ` {
 		t.Fatal(s)
