@@ -100,3 +100,31 @@ func TestInterpretNested(t *testing.T) {
 		t.Fatalf("%s", j)
 	}
 }
+
+func TestInterpretAnonymous(t *testing.T) {
+	type Parent struct {
+		Int    int
+		Nested struct {
+			Inner string
+		}
+	}
+	ref := &Type{
+		Name: "Parent",
+		Kind: KindStruct,
+		Element: []Element{
+			{Name: "Int", Type: TypeNumber},
+			{Name: "Nested", Type: &Type{
+				Kind: KindStruct,
+				Element: []Element{
+					{Name: "Inner", Type: TypeString},
+				},
+			}},
+		},
+	}
+	if v := Interpret(Parent{}); !reflect.DeepEqual(v, ref) {
+		r, _ := json.MarshalIndent(ref, "", "\t")
+		j, _ := json.MarshalIndent(v, "", "\t")
+		t.Logf("%s", r)
+		t.Fatalf("%s", j)
+	}
+}
