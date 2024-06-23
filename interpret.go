@@ -30,7 +30,7 @@ func interpret(rt reflect.Type) *Type {
 	}
 	switch kind := rt.Kind(); kind {
 	default:
-		panic(kind)
+		return nil
 	case reflect.Float32:
 		fallthrough
 	case reflect.Float64:

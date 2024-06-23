@@ -9,13 +9,15 @@ func TestTranspileStruct(t *testing.T) {
 	var (
 		buf strings.Builder
 	)
-	type Account struct {
-		ID       string `gorm:"primaryKey"`
-		Email    string `gorm:"not null;unique"`
-		Active   bool   `gorm:"not null"`
-		Password string `gorm:"not null" json:"-"`
-	}
-	Transpile(&buf, Interpret(Account{}))
+	Transpile(&buf, &Type{
+		Name: "Account",
+		Kind: KindStruct,
+		Element: []Element{
+			{Name: "ID", Type: TypeString},
+			{Name: "Email", Type: TypeString},
+			{Name: "Active", Type: TypeBoolean},
+		},
+	})
 	if s := buf.String(); s != `
 type Account = {
 	ID: string
@@ -31,19 +33,34 @@ func TestTranspileArray(t *testing.T) {
 	var (
 		buf strings.Builder
 	)
-	type Account struct {
-		ID       string `gorm:"primaryKey"`
-		Email    string `gorm:"not null;unique"`
-		Active   bool   `gorm:"not null"`
-		Password string `gorm:"not null" json:"-"`
+	account := &Type{
+		Name: "Account",
+		Kind: KindStruct,
+		Element: []Element{
+			{Name: "ID", Type: TypeString},
+			{Name: "Email", Type: TypeString},
+			{Name: "Active", Type: TypeBoolean},
+		},
 	}
-	type Group struct {
-		ID        string     `gorm:"primaryKey"`
-		Name      string     `gorm:"not null"`
-		Member    []Account  `gorm:"foreignKey:AccountID"`
-		MemberPtr []*Account `gorm:"foreignKey:AccountID"`
-	}
-	Transpile(&buf, Interpret(Group{}))
+	Transpile(&buf, &Type{
+		Name: "Group",
+		Kind: KindStruct,
+		Element: []Element{
+			{Name: "ID", Type: TypeString},
+			{Name: "Name", Type: TypeString},
+			{Name: "Member", Type: &Type{
+				Kind:  KindArray,
+				Inner: account,
+			}},
+			{Name: "MemberPtr", Type: &Type{
+				Kind: KindArray,
+				Inner: &Type{
+					Kind:  KindComposite,
+					Types: []*Type{TypeNull, account},
+				},
+			}},
+		},
+	})
 	if s := buf.String(); s != `
 type Group = {
 	ID: string

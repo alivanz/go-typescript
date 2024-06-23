@@ -28,6 +28,12 @@ func TestInterpretPrimitive(t *testing.T) {
 	}
 }
 
+func TestInterpretUnsupported(t *testing.T) {
+	if v := Interpret(make(chan int)); v != nil {
+		t.Fatal(v)
+	}
+}
+
 func TestInterpretStruct(t *testing.T) {
 	type TestStruct struct {
 		Name    string
